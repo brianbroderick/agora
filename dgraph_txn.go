@@ -30,13 +30,15 @@ func MutateDgraph(conn *grpc.ClientConn, jsonStr []byte) *api.Assigned {
 	dc := api.NewDgraphClient(conn)
 	dg := dgo.NewDgraphClient(dc)
 	ctx := context.Background()
+	txn := dg.NewTxn()
+	defer txn.Discard(ctx)
 
 	mu := &api.Mutation{
 		CommitNow: true,
 		SetJson:   jsonStr,
 	}
 
-	assigned, err := dg.NewTxn().Mutate(ctx, mu)
+	assigned, err := txn.Mutate(ctx, mu)
 	if err != nil {
 		logit.Fatal(" %e", err)
 	}
@@ -48,8 +50,10 @@ func QueryDgraph(conn *grpc.ClientConn, query string) []byte {
 	dc := api.NewDgraphClient(conn)
 	dg := dgo.NewDgraphClient(dc)
 	ctx := context.Background()
+	txn := dg.NewTxn()
+	defer txn.Discard(ctx)
 
-	resp, err := dg.NewTxn().Query(ctx, query)
+	resp, err := txn.Query(ctx, query)
 	if err != nil {
 		logit.Fatal(" Query Error: %e", err)
 	}

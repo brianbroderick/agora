@@ -29,7 +29,7 @@ func TestResolvePerson(t *testing.T) {
 }
 
 func resolvePerson(name string) []person {
-	conn := dial()
+	conn := Dial()
 	defer conn.Close()
 
 	query := fmt.Sprintf(`query Person{
@@ -57,7 +57,7 @@ func reloadData() {
 }
 
 func loadSeed() {
-	conn := dial()
+	conn := Dial()
 	defer conn.Close()
 
 	for _, p := range fellowship {
