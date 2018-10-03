@@ -61,6 +61,22 @@ func QueryDgraph(conn *grpc.ClientConn, query string) []byte {
 	return resp.Json
 }
 
+// QueryDgraphWithVars runs a query operation on DGraph with variables and returns the JSON response
+func QueryDgraphWithVars(conn *grpc.ClientConn, query string, variables map[string]string) []byte {
+	dc := api.NewDgraphClient(conn)
+	dg := dgo.NewDgraphClient(dc)
+	ctx := context.Background()
+	txn := dg.NewTxn()
+	defer txn.Discard(ctx)
+
+	resp, err := txn.QueryWithVars(ctx, query, variables)
+	if err != nil {
+		logit.Fatal(" Query Error: %e", err)
+	}
+
+	return resp.Json
+}
+
 // AlterDgraph runs an alter Dgraph operation
 func AlterDgraph(conn *grpc.ClientConn, op *api.Operation) {
 	dc := api.NewDgraphClient(conn)
