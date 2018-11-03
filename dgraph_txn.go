@@ -1,44 +1,23 @@
 package agora
 
 import (
-	"context"
-	"flag"
 	"log"
 
 	logit "github.com/brettallred/go-logit"
-	"github.com/dgraph-io/dgo"
 	"github.com/dgraph-io/dgo/protos/api"
-	"google.golang.org/grpc"
 )
-
-var (
-	dgraphHost = flag.String("d", "127.0.0.1:9080", "Dgraph server address")
-)
-
-// Dial is a helper to create a DGraph connection
-func Dial() *grpc.ClientConn {
-	conn, err := grpc.Dial(*dgraphHost, grpc.WithInsecure())
-	if err != nil {
-		logit.Fatal(" While trying to dial gRPC")
-	}
-
-	return conn
-}
 
 // MutateDgraph is a helper func to run Mutate operations on Dgraph
-func MutateDgraph(conn *grpc.ClientConn, jsonStr []byte) *api.Assigned {
-	dc := api.NewDgraphClient(conn)
-	dg := dgo.NewDgraphClient(dc)
-	ctx := context.Background()
-	txn := dg.NewTxn()
-	defer txn.Discard(ctx)
+func MutateDgraph(jsonStr []byte) *api.Assigned {
+	c := NewDgraphTxn()
+	defer c.DiscardTxn()
 
 	mu := &api.Mutation{
 		CommitNow: true,
 		SetJson:   jsonStr,
 	}
 
-	assigned, err := txn.Mutate(ctx, mu)
+	assigned, err := c.Txn.Mutate(c.Ctx, mu)
 	if err != nil {
 		logit.Fatal(" %e", err)
 	}
@@ -46,14 +25,11 @@ func MutateDgraph(conn *grpc.ClientConn, jsonStr []byte) *api.Assigned {
 }
 
 // QueryDgraph runs a query operation on DGraph and returns the JSON response
-func QueryDgraph(conn *grpc.ClientConn, query string) []byte {
-	dc := api.NewDgraphClient(conn)
-	dg := dgo.NewDgraphClient(dc)
-	ctx := context.Background()
-	txn := dg.NewTxn()
-	defer txn.Discard(ctx)
+func QueryDgraph(query string) []byte {
+	c := NewDgraphTxn()
+	defer c.DiscardTxn()
 
-	resp, err := txn.Query(ctx, query)
+	resp, err := c.Txn.Query(c.Ctx, query)
 	if err != nil {
 		logit.Fatal(" Query Error: %e", err)
 	}
@@ -62,14 +38,11 @@ func QueryDgraph(conn *grpc.ClientConn, query string) []byte {
 }
 
 // QueryDgraphWithVars runs a query operation on DGraph with variables and returns the JSON response
-func QueryDgraphWithVars(conn *grpc.ClientConn, query string, variables map[string]string) []byte {
-	dc := api.NewDgraphClient(conn)
-	dg := dgo.NewDgraphClient(dc)
-	ctx := context.Background()
-	txn := dg.NewTxn()
-	defer txn.Discard(ctx)
+func QueryDgraphWithVars(query string, variables map[string]string) []byte {
+	c := NewDgraphTxn()
+	defer c.DiscardTxn()
 
-	resp, err := txn.QueryWithVars(ctx, query, variables)
+	resp, err := c.Txn.QueryWithVars(c.Ctx, query, variables)
 	if err != nil {
 		logit.Fatal(" Query Error: %e", err)
 	}
@@ -78,12 +51,11 @@ func QueryDgraphWithVars(conn *grpc.ClientConn, query string, variables map[stri
 }
 
 // AlterDgraph runs an alter Dgraph operation
-func AlterDgraph(conn *grpc.ClientConn, op *api.Operation) {
-	dc := api.NewDgraphClient(conn)
-	dg := dgo.NewDgraphClient(dc)
+func AlterDgraph(op *api.Operation) {
+	c := NewDgraphTxn()
+	defer c.DiscardTxn()
 
-	ctx := context.Background()
-	err := dg.Alter(ctx, op)
+	err := c.Dg.Alter(c.Ctx, op)
 	if err != nil {
 		log.Fatal(err)
 	}

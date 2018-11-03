@@ -29,9 +29,6 @@ func TestResolvePerson(t *testing.T) {
 }
 
 func resolvePerson(name string) []person {
-	conn := Dial()
-	defer conn.Close()
-
 	query := fmt.Sprintf(`query Person{
 		persons(func: eq(name, "%s")) {
 			uid
@@ -39,7 +36,7 @@ func resolvePerson(name string) []person {
 		}
 	}`, name)
 
-	j := QueryDgraph(conn, query)
+	j := QueryDgraph(query)
 
 	var r dgraphResponse
 	err := json.Unmarshal(j, &r)
@@ -57,15 +54,12 @@ func reloadData() {
 }
 
 func loadSeed() {
-	conn := Dial()
-	defer conn.Close()
-
 	for _, p := range fellowship {
 		j, err := json.Marshal(p)
 		if err != nil {
 			log.Fatal(err)
 		}
-		_ = MutateDgraph(conn, j)
+		MutateDgraph(j)
 	}
 }
 
