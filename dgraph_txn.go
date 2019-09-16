@@ -8,7 +8,7 @@ import (
 )
 
 // MutateDgraph is a helper func to run Mutate operations on Dgraph
-func MutateDgraph(jsonStr []byte) *api.Assigned {
+func MutateDgraph(jsonStr []byte) *api.Response {
 	c := NewDgraphTxn()
 	defer c.DiscardTxn()
 
