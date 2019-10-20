@@ -1,6 +1,7 @@
 package agora
 
 import (
+	"encoding/json"
 	"log"
 
 	logit "github.com/brettallred/go-logit"
@@ -48,6 +49,32 @@ func QueryDgraphWithVars(query string, variables map[string]string) []byte {
 	}
 
 	return resp.Json
+}
+
+type DgraphResponse interface{}
+
+func ResolveQuery(query string) (DgraphResponse, error) {
+	j := QueryDgraph(query)
+
+	var r DgraphResponse
+	err := json.Unmarshal(j, &r)
+	if err != nil {
+		return nil, err
+	}
+
+	return r, nil
+}
+
+func ResolveQueryWithVars(query string, variables map[string]string) (DgraphResponse, error) {
+	j := QueryDgraphWithVars(query, variables)
+
+	var r DgraphResponse
+	err := json.Unmarshal(j, &r)
+	if err != nil {
+		return nil, err
+	}
+
+	return r, nil
 }
 
 // AlterDgraph runs an alter Dgraph operation
