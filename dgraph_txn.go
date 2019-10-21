@@ -51,30 +51,26 @@ func QueryDgraphWithVars(query string, variables map[string]string) []byte {
 	return resp.Json
 }
 
-type DgraphResponse interface{}
-
-func ResolveQuery(query string) (DgraphResponse, error) {
+func ResolveQuery(r interface{}, query string) error {
 	j := QueryDgraph(query)
 
-	var r DgraphResponse
 	err := json.Unmarshal(j, &r)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return r, nil
+	return nil
 }
 
-func ResolveQueryWithVars(query string, variables map[string]string) (DgraphResponse, error) {
+func ResolveQueryWithVars(r interface{}, query string, variables map[string]string) error {
 	j := QueryDgraphWithVars(query, variables)
 
-	var r DgraphResponse
 	err := json.Unmarshal(j, &r)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return r, nil
+	return nil
 }
 
 // AlterDgraph runs an alter Dgraph operation
