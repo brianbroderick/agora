@@ -25,6 +25,23 @@ func MutateDgraph(jsonStr []byte) *api.Response {
 	return assigned
 }
 
+// DeleteDgraph is a helper func to run Mutate operations on Dgraph
+func DeleteDgraph(jsonStr []byte) *api.Response {
+	c := NewDgraphTxn()
+	defer c.DiscardTxn()
+
+	mu := &api.Mutation{
+		CommitNow:  true,
+		DeleteJson: jsonStr,
+	}
+
+	assigned, err := c.Txn.Mutate(c.Ctx, mu)
+	if err != nil {
+		logit.Fatal(" %e", err)
+	}
+	return assigned
+}
+
 // QueryDgraph runs a query operation on DGraph and returns the JSON response
 func QueryDgraph(query string) []byte {
 	c := NewDgraphTxn()
@@ -83,3 +100,32 @@ func AlterDgraph(op *api.Operation) {
 		log.Fatal(err)
 	}
 }
+
+// This isn't working with vars. Need to fix
+
+// UpsertDgraph is a helper func to run Upsert operations on Dgraph
+// func UpsertDgraph(query string, variables map[string]string, cond string, jsonStr []byte) []byte {
+// 	c := NewDgraphTxn()
+// 	defer c.DiscardTxn()
+
+// 	mu := &api.Mutation{
+// 		SetJson: jsonStr,
+// 	}
+// 	// if cond != "" {
+// 	// 	mu.Cond = cond
+// 	// }
+
+// 	req := &api.Request{
+// 		Query:     query,
+// 		Vars:      variables,
+// 		Mutations: []*api.Mutation{mu},
+// 		CommitNow: true,
+// 	}
+
+// 	// // Update email only if matching uid found.
+// 	resp, err := c.Txn.Do(c.Ctx, req)
+// 	if err != nil {
+// 		logit.Fatal(" Query Error: %e", err)
+// 	}
+// 	return resp.Json
+// }

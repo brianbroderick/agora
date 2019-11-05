@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	dgraphHost = flag.String("d", "127.0.0.1:9080", "Dgraph server address")
+	dgraphHost = flag.String("d", "127.0.0.1:8080", "Dgraph server address")
 )
 
 // NewDgraphConn establishes a new Dgraph Connection
