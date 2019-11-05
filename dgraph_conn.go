@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	dgraphHost = flag.String("d", "127.0.0.1:9080", "Dgraph server address")
+	DgraphHost = flag.String("d", "127.0.0.1:9080", "Dgraph server address")
 )
 
 // NewDgraphConn establishes a new Dgraph Connection
@@ -64,7 +64,7 @@ func (c *DgraphConn) DiscardConn() {
 
 // Dial is a helper to create a DGraph connection
 func Dial() *grpc.ClientConn {
-	conn, err := grpc.Dial(*dgraphHost, grpc.WithInsecure())
+	conn, err := grpc.Dial(*DgraphHost, grpc.WithInsecure())
 	if err != nil {
 		logit.Fatal(" While trying to dial gRPC")
 	}
