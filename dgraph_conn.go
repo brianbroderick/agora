@@ -2,7 +2,7 @@ package agora
 
 import (
 	"context"
-	"flag"
+	"os"
 
 	logit "github.com/brettallred/go-logit"
 	"github.com/dgraph-io/dgo"
@@ -11,8 +11,16 @@ import (
 )
 
 var (
-	DgraphHost = flag.String("d", "127.0.0.1:9080", "Dgraph server address")
+	DgraphHost = GetDgraphHost()
 )
+
+func GetDgraphHost() string {
+	dh := os.Getenv("DGRAPH_HOST")
+	if dh == "" {
+		return "127.0.0.1:9080"
+	}
+	return dh
+}
 
 // NewDgraphConn establishes a new Dgraph Connection
 func NewDgraphConn() *DgraphConn {
