@@ -10,10 +10,6 @@ import (
 	"google.golang.org/grpc"
 )
 
-var (
-	DgraphHost = GetDgraphHost()
-)
-
 func GetDgraphHost() string {
 	dh := os.Getenv("DGRAPH_HOST")
 	if dh == "" {
@@ -72,7 +68,8 @@ func (c *DgraphConn) DiscardConn() {
 
 // Dial is a helper to create a DGraph connection
 func Dial() *grpc.ClientConn {
-	conn, err := grpc.Dial(*DgraphHost, grpc.WithInsecure())
+	dh := GetDgraphHost()
+	conn, err := grpc.Dial(dh, grpc.WithInsecure())
 	if err != nil {
 		logit.Fatal(" While trying to dial gRPC")
 	}
