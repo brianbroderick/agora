@@ -5,7 +5,7 @@ import (
 	"log"
 
 	logit "github.com/brettallred/go-logit"
-	"github.com/dgraph-io/dgo/protos/api"
+	"github.com/brianbroderick/dgo/v2/protos/api"
 )
 
 // MutateDgraph is a helper func to run Mutate operations on Dgraph

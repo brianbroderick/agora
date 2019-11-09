@@ -5,8 +5,8 @@ import (
 	"os"
 
 	logit "github.com/brettallred/go-logit"
-	"github.com/dgraph-io/dgo"
-	"github.com/dgraph-io/dgo/protos/api"
+	"github.com/brianbroderick/dgo/v2"
+	"github.com/brianbroderick/dgo/v2/protos/api"
 	"google.golang.org/grpc"
 )
 
