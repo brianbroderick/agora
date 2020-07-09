@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"log"
 
-	logit "github.com/brettallred/go-logit"
-	"github.com/brianbroderick/dgo/v2/protos/api"
+	"github.com/brianbroderick/logit"
+	"github.com/dgraph-io/dgo/v200/protos/api"
 )
 
 // MutateDgraph is a helper func to run Mutate operations on Dgraph

@@ -4,9 +4,9 @@ import (
 	"context"
 	"os"
 
-	logit "github.com/brettallred/go-logit"
-	"github.com/brianbroderick/dgo/v2"
-	"github.com/brianbroderick/dgo/v2/protos/api"
+	"github.com/brianbroderick/logit"
+	"github.com/dgraph-io/dgo/v200"
+	"github.com/dgraph-io/dgo/v200/protos/api"
 	"google.golang.org/grpc"
 )
 
