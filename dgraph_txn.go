@@ -85,8 +85,7 @@ func QueryDgraphWithVars(query string, variables map[string]string) []byte {
 
 	resp, err := c.Txn.QueryWithVars(c.Ctx, query, variables)
 	if err != nil {
-		logit.Fatal("Query Error: %e", err)
-		return []byte{}
+		return RetryQueryDgraphWithVars(query, variables, 1)
 	}
 
 	return resp.Json
@@ -94,6 +93,9 @@ func QueryDgraphWithVars(query string, variables map[string]string) []byte {
 
 // RetryQueryDgraphWithVars retries a query on DGraph with variables and returns the JSON response
 func RetryQueryDgraphWithVars(query string, variables map[string]string, attempt int) []byte {
+	logit.Warn("Retrying Query")
+	time.Sleep(500 * time.Millisecond)
+
 	c := NewDgraphTxn()
 	defer c.DiscardTxn()
 
