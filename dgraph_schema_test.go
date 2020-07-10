@@ -49,7 +49,22 @@ func resolvePerson(name string) []person {
 
 func reloadData() {
 	DropAll()
-	SetSchema(`name: string @index(term) .`)
+	SetSchema(`name: string @index(term) .
+
+	type Region {
+		regionName: string
+		partOf: Region
+		coorX: int
+		coorY: int
+		coorZ: int
+	}
+
+	regionName: string .
+	partOf: uid .
+	coorX: int .
+	coorY: int .
+	coorZ: int .	
+	`)
 	loadSeed()
 }
 
