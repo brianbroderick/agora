@@ -1,7 +1,7 @@
 package agora
 
 import (
-	"github.com/dgraph-io/dgo/v200/protos/api"
+	"github.com/dgraph-io/dgo/v210/protos/api"
 )
 
 // DropAll drops the entire Dgraph database

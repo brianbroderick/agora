@@ -79,31 +79,31 @@ func loadSeed() {
 }
 
 var fellowship = []person{
-	person{
+	{
 		Name: "Aragorn",
 	},
-	person{
+	{
 		Name: "Boromir",
 	},
-	person{
+	{
 		Name: "Frodo",
 	},
-	person{
+	{
 		Name: "Gandalf",
 	},
-	person{
+	{
 		Name: "Gimli",
 	},
-	person{
+	{
 		Name: "Legolas",
 	},
-	person{
+	{
 		Name: "Merry",
 	},
-	person{
+	{
 		Name: "Pippin",
 	},
-	person{
+	{
 		Name: "Samwise",
 	},
 }
