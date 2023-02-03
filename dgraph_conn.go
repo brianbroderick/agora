@@ -68,8 +68,11 @@ func (c *DgraphConn) DiscardConn() {
 
 // Dial is a helper to create a DGraph connection
 func Dial() *grpc.ClientConn {
+	var opts []grpc.CallOption
 	dh := GetDgraphHost()
-	conn, err := grpc.Dial(dh, grpc.WithInsecure())
+
+	opts = append(opts, grpc.MaxCallRecvMsgSize(100*1024*1024))
+	conn, err := grpc.Dial(dh, grpc.WithDefaultCallOptions(opts...), grpc.WithInsecure())
 	if err != nil {
 		logit.Fatal(" While trying to dial gRPC")
 	}
